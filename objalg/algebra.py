@@ -36,3 +36,25 @@ def algebra_impl(cls):
 
         return wrapper
     return decorator
+
+
+def Union(A, B):
+    a_type = A().T()
+    b_type = B().T()
+
+    if not a_type == b_type:
+        raise TypeError('Cannot union {a} and {b}. {a}.T == {a_type} and {b}.T == {b_type} and {a_type} != {b_type}'.format(
+                a=A.__name__,
+                b=B.__name__,
+                a_type=a_type.__name__,
+                b_type=b_type.__name__,
+            ))
+
+    UnionClass = type(
+        A.__name__ + B.__name__,
+        (A, B),
+        {},
+    )
+    return UnionClass
+
+

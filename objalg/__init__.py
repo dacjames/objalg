@@ -1,1 +1,1 @@
-from .algebra import algebra_impl
+from .algebra import algebra_impl, Union
