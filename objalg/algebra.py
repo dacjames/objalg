@@ -1,10 +1,10 @@
 from functools import wraps
 from weakref import WeakValueDictionary
 
+method_cache = WeakValueDictionary()
+
 
 def algebra_impl(cls):
-    method_cache = WeakValueDictionary()
-
     def find_abstract_method(cls):
         key = id(cls)
         if key not in method_cache:
