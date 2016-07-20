@@ -1,27 +1,26 @@
 from functools import wraps
 from weakref import WeakValueDictionary
 
-method_cache = WeakValueDictionary()
+_method_cache = WeakValueDictionary()
+def _find_abstract_method(cls):
+    key = id(cls)
+    if key not in _method_cache:
+        for name in dir(cls):
+            member = getattr(cls, name)
+            if getattr(member, '__isabstractmethod__', False):
+                _method_cache[key] = member
+                return member
+        raise TypeError(cls)
+
+    return _method_cache[key]
 
 
 def algebra_impl(cls):
-    def find_abstract_method(cls):
-        key = id(cls)
-        if key not in method_cache:
-            for name in dir(cls):
-                member = getattr(cls, name)
-                if getattr(member, '__isabstractmethod__', False):
-                    method_cache[key] = member
-                    return member
-            raise TypeError(cls)
-
-        return method_cache[key]
-
     def decorator(wrapped):
         @wraps(wrapped)
         def wrapper(algebra, *args, **kwargs):
             iface = algebra.T()
-            method = find_abstract_method(iface)
+            method = _find_abstract_method(iface)
 
             def impl(self):
                 return wrapped(algebra, self)

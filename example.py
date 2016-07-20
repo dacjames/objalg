@@ -306,6 +306,10 @@ def expr(alg):
     return alg.add(alg.literal(1), alg.literal(2))
 
 
+def expr1(alg):
+    return alg.add(alg.literal(1), alg.add(alg.literal(2), alg.literal(2)))
+
+
 def expr2(alg):
     return alg.iff(alg.boolean(True), alg.literal(10), alg.literal(20))
 
@@ -333,8 +337,8 @@ def main():
     assert expr2(eval_alg).eval() == 10
     assert expr3(stmt_alg).eval() == 6
 
-    print(expr(combine_alg).b.show(), '=>', expr(combine_alg).a.eval())
-    print(expr(debug_alg).b.show(), '=>', expr(debug_alg).a.eval())
+    print(expr1(combine_alg).b.show(), '=>', expr(combine_alg).a.eval())
+    print(expr1(debug_alg).b.show(), '=>', expr(debug_alg).a.eval())
 
     print(expr(show_alg).show(), '=>', expr(stmt_alg).eval())
     print(expr2(show_alg).show(), '=>', expr2(stmt_alg).eval())
